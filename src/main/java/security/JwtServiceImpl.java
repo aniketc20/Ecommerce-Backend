@@ -22,10 +22,16 @@ public class JwtServiceImpl implements JwtGeneratorService {
     @Value("${jwt.secret}")
     private String SECRET_KEY;
 
+    @Value("${spring.datasource.cookieURL}")
+    private String URL;
+
     private static final Logger LOGGER = LoggerFactory.getLogger(JwtServiceImpl.class);
 
     private static final String COOKIE_NAME = "token";
 
+    /*
+     * This method generates the JWT token using the secret key
+     */
     @Override
     public Map<String, String> generateToken(UserBean user) {
         // TODO Auto-generated method stub
@@ -36,16 +42,20 @@ public class JwtServiceImpl implements JwtGeneratorService {
         jwtToken = Jwts.builder()
                 .setSubject(String.format("%s", user.getUsername()))
                 .setIssuedAt(new Date())
-//	    		.setExpiration(new Date(System.currentTimeMillis() + 20000))
+	    		.setExpiration(new Date(System.currentTimeMillis() + 200000))
                 .signWith(hmacKey)
                 .compact();
 
         Map<String, String> jwtTokenGen = new HashMap<>();
         jwtTokenGen.put("token", jwtToken);
         jwtTokenGen.put("user", user.getUsername());
+        System.out.print(jwtTokenGen);
         return jwtTokenGen;
     }
 
+    /*
+     * This method validates the JWT by invoking parseClaims method
+     */
     public boolean validateAccessToken(String token) {
         try {
             parseClaims(token);
@@ -64,6 +74,9 @@ public class JwtServiceImpl implements JwtGeneratorService {
         return false;
     }
 
+    /*
+     * Gets the subject from the client's JWT
+     */
     public String getSubject(String token) {
         return parseClaims(token).getSubject();
     }
@@ -75,19 +88,22 @@ public class JwtServiceImpl implements JwtGeneratorService {
                 .getBody();
     }
 
+    /*
+     * This method generates the cookie and adds the JWT to it
+     */
     public Cookie generateCookie(UserBean user) {
         String token = generateToken(user).get("token");
         // Create a cookie with the value set as the token string
         try {
             Cookie jwtCookie = new Cookie(COOKIE_NAME, token);
             jwtCookie.setHttpOnly(true);
-            jwtCookie.setDomain("192.168.0.105");
+            jwtCookie.setDomain(URL);
             jwtCookie.setSecure(false);
             jwtCookie.setPath("/");
+            jwtCookie.setMaxAge(50000);
             return jwtCookie;
         } catch (Exception e) {
             return null;
         }
-        //jwtCookie.setMaxAge(MAX_AGE_SECONDS);
     }
 }

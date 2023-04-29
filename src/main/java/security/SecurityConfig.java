@@ -32,6 +32,13 @@ public class SecurityConfig {
 			.exceptionHandling()
 			.authenticationEntryPoint(jwtAuthenticationEntryPoint);
 
+		/*
+		 * The below code is for logging out users
+		 * By default, Spring Security redirects users 
+		 * to /login?logout after a successful logout
+		 * We are disabling it by just returning 'HttpStatus.OK'
+		 * the user cookies are also deleted containing the JWT
+		 */
 		http.cors().and().csrf().disable()
 		.logout(logout -> logout
 				.logoutUrl("/logout")
@@ -43,6 +50,15 @@ public class SecurityConfig {
 						response.addCookie(cookieToDelete);
               }
           }).logoutSuccessHandler(new HttpStatusReturningLogoutSuccessHandler(HttpStatus.OK)));
+
+		/*
+								** Important **
+		Spring Security is a filter based framework. Either we are 
+		enabling existing filter and configuring it or adding our custom filter
+		
+		The addFilterBefore is invoked to intercept the incoming request
+		On successful creds verification, a UsernamePasswordAuthenticationFilter object is returned
+		 */ 
 		http.addFilterBefore(jwtTokenFilter, UsernamePasswordAuthenticationFilter.class);
 		return http.build();
 	}

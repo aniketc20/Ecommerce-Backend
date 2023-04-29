@@ -13,7 +13,11 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
-
+/*
+ * This class deals with custom unauthorized error message
+ * Basically this is the Entry Point for our JWT Authentication
+ * Once it passed this you are good to go 👍
+ */
 @Component
 public class JwtAuthenticationEntryPoint implements AuthenticationEntryPoint {
 

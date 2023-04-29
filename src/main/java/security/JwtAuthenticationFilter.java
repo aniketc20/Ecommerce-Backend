@@ -1,10 +1,12 @@
 package security;
 
+import models.UserEntity;
+
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import models.UserEntity;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -15,6 +17,10 @@ import org.springframework.web.util.WebUtils;
 
 import java.io.IOException;
 
+/*
+ * This class has the set of filters the request has to pass through
+ * to respond to a particular API call
+ */
 @Component
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
