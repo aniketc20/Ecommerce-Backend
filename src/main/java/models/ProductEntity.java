@@ -22,4 +22,5 @@ public class ProductEntity {
 	private Integer price;
 	private Integer qty;
 	private String desc;
+	private String imgUrl;
 }

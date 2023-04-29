@@ -1,6 +1,6 @@
 package beans;
 
-import java.util.List;
+import java.util.Set;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -13,5 +13,5 @@ public class OrderBean {
 	
 	private String username;
 	private Integer totalPrice;
-	private List<ProductOrder> products;
+	private Set<ProductOrder> products;
 }

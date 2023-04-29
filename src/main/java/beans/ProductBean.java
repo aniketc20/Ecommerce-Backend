@@ -12,4 +12,5 @@ public class ProductBean {
 	private Integer qty;
 	private Integer price;
 	private String desc;
+	private String imgUrl;
 }

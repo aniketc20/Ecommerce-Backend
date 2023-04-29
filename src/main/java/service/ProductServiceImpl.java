@@ -3,6 +3,9 @@ package service;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -26,7 +29,7 @@ public class ProductServiceImpl implements ProductService {
 	}
 
 	@Override
-	public List<ProductBean> getAll() {
+	public JSONObject getAll() throws JSONException {
 		// TODO Auto-generated method stub
 		List<ProductEntity> products = productRepository.findAll();
         List<ProductBean> productBeans = new ArrayList<>();
@@ -35,7 +38,13 @@ public class ProductServiceImpl implements ProductService {
             BeanUtils.copyProperties(products.get(i), productBean);
             productBeans.add(productBean);
         }
-        return productBeans;
+    	JSONObject jsonResponse = new JSONObject();
+    	JSONArray jsonArray = new JSONArray();
+        for(ProductBean product : productBeans) {
+            jsonArray.put(new JSONObject(product));
+        }
+    	jsonResponse.put("products", jsonArray);
+        return jsonResponse;
 	}
 
 	@Override

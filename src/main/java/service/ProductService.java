@@ -1,6 +1,7 @@
 package service;
 
-import java.util.List;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import beans.ProductBean;
 import models.ProductEntity;
@@ -9,7 +10,7 @@ public interface ProductService {
 	
 	void addProd(ProductBean prodBean);
 	
-	List<ProductBean> getAll();
+	JSONObject getAll() throws JSONException;
 	
 	ProductEntity getProduct(int id);
 }
